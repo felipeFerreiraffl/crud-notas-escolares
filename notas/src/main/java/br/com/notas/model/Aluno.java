@@ -1,6 +1,7 @@
 package br.com.notas.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ public class Aluno {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
-	private Date dtNascimento;
+	private LocalDate dtNascimento;
 	private String cpf;
 	private String turma;
 }
