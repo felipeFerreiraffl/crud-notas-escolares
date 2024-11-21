@@ -1,12 +1,13 @@
 {
   "expo": {
-    "name": "notas-rn",
-    "slug": "notas-rn",
+    "name": "notas-escolares",
+    "slug": "notas-escolares",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "scheme": "notas-escolares",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -23,6 +24,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
