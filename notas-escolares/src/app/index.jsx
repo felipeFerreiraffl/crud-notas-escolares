@@ -32,35 +32,42 @@ export default function TelaInicial() {
                 <Text style={styles.title}>CRUD com notas escolares</Text>
             </View>
             <View style={styles.buttonContent}>
-                <LinearGradient
-                    style={styles.buttonBackground}
-                    colors={[ntColors.ntBlack, ntColors.ntDarkGray, ntColors.ntGray]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => router.push('professor/escolher')}
                 >
-                    <TouchableOpacity style={styles.button}>
+                    <LinearGradient
+                        style={styles.buttonBackground}
+                        colors={[ntColors.ntBlueDark, ntColors.ntBlueSec, ntColors.ntGray]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                    >
                         <Text style={styles.buttonText}>Entrar como professor</Text>
                         <Image
                             style={styles.buttonImage}
                             source={require('../assets/images/professor-img.png')}
                         />
-                    </TouchableOpacity>
-                </LinearGradient>
-                <LinearGradient
-                    style={styles.buttonBackground}
-                    colors={[ntColors.ntBlack, ntColors.ntDarkGray, ntColors.ntGray]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
+                    </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => router.push('aluno/escolher')}
                 >
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Entrar como professor</Text>
+                    <LinearGradient
+                        style={styles.buttonBackground}
+                        colors={[ntColors.ntRedRep, ntColors.ntYellowRec, ntColors.ntBlueQua]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                    >
+                        <Text style={styles.buttonText}>Entrar como aluno</Text>
                         <Image
                             style={styles.buttonImage}
-                            source={require('../assets/images/professor-img.png')}
+                            source={require('../assets/images/aluno-img.png')}
                         />
-                    </TouchableOpacity>
-                </LinearGradient>
+                    </LinearGradient>
+                </TouchableOpacity>
             </View>
+            <Text style={styles.credits}>Feito por Felipe Ferreira</Text>
         </View>
     );
 }
@@ -73,6 +80,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     titleContent: {
+        flex: 2,
         width: '100%',
         height: 'auto',
         display: 'flex',
@@ -81,6 +89,8 @@ const styles = StyleSheet.create({
         backgroundColor: ntColors.ntBlueMain,
         paddingTop: 22,
         paddingBottom: 21,
+        borderStartEndRadius: 15,
+        borderEndEndRadius: 15,
     },
     titleImage: {
         width: 150,
@@ -92,22 +102,23 @@ const styles = StyleSheet.create({
         color: ntColors.ntWhite,
     },
     buttonContent: {
+        flex: 3,
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',
         gap: 57,
-        marginTop: 45,
+        marginTop: 77,
     },
     buttonBackground: {
-        width: '100%',
         borderRadius: 5,
-    },
-    button: {
-        position: 'relative',
         width: 298,
         height: 85,
         paddingStart: 29,
-        paddingTop: 9,
+        paddingTop: 12,
+    },
+    button: {
+        position: 'relative',
+        width: '100%',
     },
     buttonText: {
         fontFamily: ntFonts.ntJakartaSansBold,
@@ -121,6 +132,11 @@ const styles = StyleSheet.create({
         width: 100,
         height: 117,
         left: 181,
-        bottom: 0,
+        bottom: -8,
+    },
+    credits: {
+        fontFamily: ntFonts.ntJakartaSansRegular,
+        fontSize: ntFontSizes.ntSize10,
+        marginBottom: 15,
     },
 });
