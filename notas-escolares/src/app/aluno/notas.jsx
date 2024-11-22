@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { UserContext } from './../../service/UserContext';
-import { getAll, updateObj } from './../../service/api/api';
+import { getAll, getById, updateObj } from './../../service/api/api';
 
 export default function NotasAluno() {
   const [notas, setNotas] = useState([]);

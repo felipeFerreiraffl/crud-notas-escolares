@@ -11,7 +11,7 @@ export default function EscolherProf() {
     const { setUser } = useContext(UserContext);
 
     const handleSelect = (prof) => {
-        setUser({ tipo: 'professor', nome: prof.nome });
+        setUser({ tipo: 'professor', id: prof.id, nome: prof.nome });
         router.push('/professor');
     };
 

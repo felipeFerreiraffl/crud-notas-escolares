@@ -12,6 +12,7 @@ export default function TelaAluno() {
             <Text>Bem vindo, {user.nome.split(' ')[0]}</Text>
             <Button title='INFOS' onPress={() => router.push('aluno/infos')} />
             <Button title='NOTAS' onPress={() => router.push('aluno/notas')} />
+            <Button title='SOBRE' onPress={() => router.push('/sobre')} />
         </View>
     );
 }

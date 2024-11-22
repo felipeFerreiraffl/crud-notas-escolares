@@ -12,6 +12,7 @@ export default function TelaProfessor() {
             <Text>Bem vindo, {user.nome.split(' ')[0]}</Text>
             <Button title='INFOS' onPress={() => alert("INFOS")} />
             <Button title='NOTAS' onPress={() => router.push('/professor/notas')} />
+            <Button title='SOBRE' onPress={() => router.push('/sobre')} />
         </View>
     );
 }
