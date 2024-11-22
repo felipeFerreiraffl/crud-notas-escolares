@@ -1,8 +1,12 @@
 import { Link, router, useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { UserContext } from '../../service/UserContext';
 import { getAll } from '../../service/api/api';
+import NameCard from '../../components/NameCard';
+import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
+import { ntColors } from '../../styles/colors/colors';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function EscolherProf() {
     const [profs, setProfs] = useState([]);
@@ -35,6 +39,14 @@ export default function EscolherProf() {
 
     }, []);
 
+    const createProf = (prof) => {
+
+    }
+
+    const deleteProf = () => {
+
+    }
+
     if (loading) {
         return (
             <View>
@@ -53,17 +65,33 @@ export default function EscolherProf() {
 
     return (
         <View style={styles.container}>
-            <Text>ENTRAR COMO PROFESSOR</Text>
-            <Link href={"/"}>VOLTAR</Link>
-            <FlatList 
-                data={profs}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleSelect(item)}>
-                        <Text>{item.nome}</Text>
+            <View style={styles.titleContent}>
+                <Image
+                    style={styles.titleImage}
+                    source={require('../../assets/images/logo/logo-large.png')}
+                />
+                <Text style={styles.title}>CRUD com notas escolares</Text>
+            </View>
+            <View style={styles.listContent}>
+                <Text style={styles.listTitle}>Selecione seu nome, professor</Text>
+                <View style={styles.listButtonsContent}>
+                    <TouchableOpacity>
+                        <Ionicons name='add-circle-outline' size={28} color={ntColors.ntBlack} />
                     </TouchableOpacity>
-                )}
-            />
+                    <TouchableOpacity>
+                        <Ionicons name='close-circle-outline' size={28} color={ntColors.ntBlack} />
+                    </TouchableOpacity>
+                </View>
+                <FlatList
+                    style={styles.listNomes}
+                    data={profs}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <NameCard name={item.nome} onPress={() => handleSelect(item)} />
+                    )}
+                />
+            </View>
+            <Text style={styles.credits}>Feito por Felipe Ferreira</Text>
         </View>
     );
 }
@@ -74,5 +102,54 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    titleContent: {
+        flex: 2,
+        width: '100%',
+        height: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 20,
+        backgroundColor: ntColors.ntBlueMain,
+        paddingTop: 22,
+        paddingBottom: 21,
+        borderStartEndRadius: 15,
+        borderEndEndRadius: 15,
+    },
+    titleImage: {
+        width: 150,
+        height: 150,
+    },
+    title: {
+        fontFamily: ntFonts.ntQuicksandBold,
+        fontSize: ntFontSizes.ntSize20,
+        color: ntColors.ntWhite,
+    },
+    listContent: {
+        flex: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 35,
+    },
+    listTitle: {
+        textAlign: 'center',
+        fontFamily: ntFonts.ntQuicksandBold,
+        fontSize: ntFontSizes.ntSize20,
+        color: ntColors.ntBlack,
+    },
+    listButtonsContent: {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'row',
+        alignSelf: 'flex-end',
+        gap: 17,
+        marginTop: 15,
+    },
+    credits: {
+        fontFamily: ntFonts.ntJakartaSansRegular,
+        fontSize: ntFontSizes.ntSize10,
+        marginBottom: 15,
     },
 });
