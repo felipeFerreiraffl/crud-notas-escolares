@@ -37,7 +37,7 @@ public class NotaService {
 	public Nota updateNota(Long id, Nota nota) {
 		Nota existingNota = getNotaById(id);
 		
-		existingNota.setValorNota(nota.getValorNota());
+		existingNota.setValoresNota(nota.getValoresNota());
 		existingNota.setAluno(nota.getAluno());
 		existingNota.setDisciplina(nota.getDisciplina());
 		

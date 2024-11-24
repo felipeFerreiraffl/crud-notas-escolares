@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { UserContext } from './../../service/UserContext';
 import { getAll, getById, updateObj } from './../../service/api/api';
+import NotasTable from '../../components/NotasTable';
 
 export default function NotasAluno() {
   const [notas, setNotas] = useState([]);
@@ -12,11 +13,20 @@ export default function NotasAluno() {
     const fetchNotas = async () => {
       try {
         const response = await getAll('nota');
+        const formattedNotas = response.map((nota) => ({
+          id: nota.id,
+          aluno: nota.aluno.nome,
+          disciplina: nota.disciplina.nome,
+          nota: [nota.valorNota || null],
+        }));
 
-        setNotas(response);
+        console.log(formattedNotas);
+        setNotas(formattedNotas);
 
       } catch (error) {
         console.error("Erro ao buscar as notas do aluno: ", error);
+        Alert.alert("Erro", "Não foi possível buscar as notas do aluno");
+
       } finally {
         setLoading(false);
       }
@@ -24,15 +34,35 @@ export default function NotasAluno() {
 
     fetchNotas();
 
-  }, [user]);
+  }, []);
 
-  const handleEditNota = async (notaId, newValor) => {
+  const handleEditNota = async (notaId, index, newValor) => {
     try {
-      await updateObj(notaId, 'nota', { valorNota: newValor });
-      alert('Nota atualizada!');
+      const notaParaAtualizar = notas.find((n) => n.id === notaId);
+      if (!notaParaAtualizar) {
+        throw new Error("Nota não localizada");
+      }
+
+      const updatedNota = notas.map((nota => 
+        nota.id === notaId
+        ? { ...nota, notas: nota.notas.map((val, i) => (i === index ? newValor : val)) }
+        : nota
+      ));
+      setNotas(updatedNota);
+
+      const updatedNotaObj = {
+        id: notaId,
+        valorNota: parseFloat(newValor),
+        aluno: notaParaAtualizar.aluno,
+        disciplina: notaParaAtualizar.disciplina,
+      }
+
+      await updateObj(notaId, 'nota', updatedNotaObj);
+      Alert.alert("Sucesso", "Nota atualizada com sucesso!");
+      
     } catch (error) {
       console.error("Erro ao atualizar nota: ", error);
-
+      Alert.alert("Erro", "Erro ao atualizar na nota");
     }
   }
 
@@ -54,7 +84,13 @@ export default function NotasAluno() {
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <NotasTable 
+        dados={notas}
+        coluna1={user.tipo === 'aluno' ? 'Matéria' : 'Aluno'}
+        editable={user.tipo === 'professor'}
+        onChangeText={user.tipo === 'professor' ? handleEditNota : null}
+      />
+      {/* <FlatList
         contentContainerStyle={{ padding: 20 }}
         data={notas}
         keyExtractor={(item) => item.id.toString()}
@@ -74,7 +110,7 @@ export default function NotasAluno() {
             )}
           </View>
         )}
-      />
+      /> */}
     </View>
   );
 }

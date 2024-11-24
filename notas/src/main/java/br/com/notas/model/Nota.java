@@ -23,7 +23,7 @@ public class Nota {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private double valorNota;
+	private double[] valoresNota = new double[4];
 	
 	@ManyToOne
 	@JoinColumn(name = "aluno_id")
