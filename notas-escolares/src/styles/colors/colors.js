@@ -1,3 +1,4 @@
+// Variáveis de cores utilizadas
 export const ntColors = {
   ntBlack: "#000000",
   ntDarkGray: "#727272",

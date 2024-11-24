@@ -1,3 +1,4 @@
+// Estilo de fontes
 export const ntFonts = {
   ntQuicksandRegular: "Quicksand-Regular",
   ntQuicksandBold: "Quicksand-Bold",
@@ -5,6 +6,7 @@ export const ntFonts = {
   ntJakartaSansBold: "JakartaSans-Bold",
 };
 
+// Tamanho de fontes
 export const ntFontSizes = {
   ntSize24: 24,
   ntSize20: 20,

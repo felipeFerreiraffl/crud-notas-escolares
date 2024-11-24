@@ -2,12 +2,16 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 import { ntColors } from '../../styles/colors/colors';
 import { images } from './../../assets/images/assets';
+import { router } from 'expo-router';
 
-export default function ScreenButton({ backgroundColor, screenName, imageKey }) {
+export default function ScreenButton({ backgroundColor, screenName, imageKey, onPress }) {
     return (
-        <TouchableOpacity style={[styles.buttonContent, {backgroundColor}]}>
+        <TouchableOpacity
+            style={[styles.buttonContent, { backgroundColor }]}
+            onPress={() => router.push(onPress)}
+        >
             <Text style={styles.text}>{screenName}</Text>
-            <Image 
+            <Image
                 style={styles.image}
                 source={images[imageKey]}
             />

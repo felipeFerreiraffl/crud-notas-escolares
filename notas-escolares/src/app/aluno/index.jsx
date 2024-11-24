@@ -33,6 +33,7 @@ export default function TelaAluno() {
                         backgroundColor={ntColors.ntBlueTer}
                         screenName={'Sobre o app'}
                         imageKey={'sobre'}
+                        onPress={'/sobre'}
                     />
 
                 </View>

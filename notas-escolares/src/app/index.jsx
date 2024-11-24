@@ -1,11 +1,10 @@
+import { registerRootComponent } from 'expo';
 import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ReanimatedScreen } from 'react-native-reanimated';
 import { ntFonts, ntFontSizes } from '../styles/fonts/fonts';
 import { ntColors } from './../styles/colors/colors';
-import { registerRootComponent } from 'expo';
 
 export default function TelaInicial() {
     // Carrega as fontes do app

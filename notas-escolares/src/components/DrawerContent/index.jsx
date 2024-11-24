@@ -7,10 +7,12 @@ import { router } from 'expo-router';
 
 const screenWidth = Dimensions.get("window").width;
 
+// Drawer manual e personalizado para as telas iniciais de aluno e professor
 export default function DrawerContent({ children }) {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const drawerAnimation = useRef(new Animated.Value(-screenWidth)).current;
 
+    // Função que ativa o drawer ou não
     const toggleDrawer = () => {
         if (drawerOpen) {
             // Fecha o drawer (false)
@@ -29,7 +31,7 @@ export default function DrawerContent({ children }) {
         }
     };
 
-    // Fecha o drawer ao clicar na tela
+    // Fecha o drawer ao clicar em algum lugar não funcional da tela
     const handleOutsideClick = () => {
         if (drawerOpen) {
             toggleDrawer();
