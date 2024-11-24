@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { UserContext } from './../../service/UserContext';
-import { getAll, getById, updateObj } from './../../service/api/api';
+import { getAll, getById, getNotaByAluno, updateObj } from './../../service/api/api';
 import NotasTable from '../../components/NotasTable';
 
 export default function NotasAluno() {
@@ -12,12 +12,12 @@ export default function NotasAluno() {
   useEffect(() => {
     const fetchNotas = async () => {
       try {
-        const response = await getAll('nota');
+        const response = await getNotaByAluno(user.id);
         const formattedNotas = response.map((nota) => ({
           id: nota.id,
           aluno: nota.aluno.nome,
           disciplina: nota.disciplina.nome,
-          nota: [nota.valorNota || null],
+          nota: nota.valoresNota || [null, null, null, null],
         }));
 
         console.log(formattedNotas);
@@ -43,16 +43,16 @@ export default function NotasAluno() {
         throw new Error("Nota não localizada");
       }
 
-      const updatedNota = notas.map((nota => 
+      const updatedNota = notas.map(((nota) => 
         nota.id === notaId
-        ? { ...nota, notas: nota.notas.map((val, i) => (i === index ? newValor : val)) }
+        ? { ...nota, notas: nota.notas.map((val, i) => (i === index ? parseFloat(newValor) : val)) }
         : nota
       ));
       setNotas(updatedNota);
 
       const updatedNotaObj = {
         id: notaId,
-        valorNota: parseFloat(newValor),
+        valoresNota: updatedNota.find((n) => n.id === notaId).nota,
         aluno: notaParaAtualizar.aluno,
         disciplina: notaParaAtualizar.disciplina,
       }
@@ -86,31 +86,9 @@ export default function NotasAluno() {
     <View style={styles.container}>
       <NotasTable 
         dados={notas}
-        coluna1={user.tipo === 'aluno' ? 'Matéria' : 'Aluno'}
         editable={user.tipo === 'professor'}
         onChangeText={user.tipo === 'professor' ? handleEditNota : null}
       />
-      {/* <FlatList
-        contentContainerStyle={{ padding: 20 }}
-        data={notas}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View>
-            <Text>
-              {user.tipo === 'aluno' ? `Disciplina: ${item.disciplina.nome}` : `Aluno: ${item.aluno.nome}}`}
-            </Text>
-            {user.tipo === 'professor' ? (
-              <TextInput
-                keyboardType='numeric'
-                defaultValue={String(item.valorNota)}
-                onEndEditing={(e) => handleEditNota(item.id, e.nativeEvent.text)}
-              />
-            ) : (
-              <Text>{item.valorNota}</Text>
-            )}
-          </View>
-        )}
-      /> */}
     </View>
   );
 }

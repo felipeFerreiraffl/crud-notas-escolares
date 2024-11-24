@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.notas.model.Nota;
@@ -30,6 +31,11 @@ public class NotaController {
 	@GetMapping("/{id}")
 	public Nota getNotabyId(@PathVariable Long id) {
 		return serv.getNotaById(id);
+	}
+	
+	@GetMapping("/aluno")
+	public List<Nota> getNotasByAluno(@RequestParam Long alunoId) {
+		return serv.getNotasbyAluno(alunoId);
 	}
 	
 	@PostMapping

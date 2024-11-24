@@ -31,3 +31,9 @@ export const deleteObj = async (id, endpoint) => {
     const response = await api.delete(`/${endpoint}/${id}`);
     return response.data;
 }
+
+// Específico para pegar as notas de um aluno
+export const getNotaByAluno = async (alunoId) => {
+    const response = await api.get(`/nota/aluno?alunoId=${alunoId}`);
+    return response.data;
+}

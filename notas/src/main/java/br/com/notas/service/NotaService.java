@@ -30,6 +30,10 @@ public class NotaService {
 		
 	}
 	
+	public List<Nota> getNotasbyAluno(Long alunoId) {
+		return repo.findByAlunoId(alunoId);
+	}
+	
 	public Nota createNota(Nota nota) {
 		return repo.save(nota);
 	}
@@ -37,7 +41,19 @@ public class NotaService {
 	public Nota updateNota(Long id, Nota nota) {
 		Nota existingNota = getNotaById(id);
 		
-		existingNota.setValoresNota(nota.getValoresNota());
+		if (nota.getValoresNota() != null) {
+			double[] newValoresNota = nota.getValoresNota();
+			double[] existingValoresNota = existingNota.getValoresNota();
+			
+			for (int i = 0; i < existingNota.getValoresNota().length; i++) {
+				if (i < newValoresNota.length && newValoresNota[i] != 0) {
+					existingValoresNota[i] = newValoresNota[i];
+				}
+			}
+			
+			existingNota.setValoresNota(existingValoresNota);
+		}
+		
 		existingNota.setAluno(nota.getAluno());
 		existingNota.setDisciplina(nota.getDisciplina());
 		
