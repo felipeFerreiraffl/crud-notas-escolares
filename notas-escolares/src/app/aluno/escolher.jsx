@@ -1,12 +1,12 @@
 import { Link, router, useRouter } from 'expo-router';
-import { Button, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Button, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { getAll } from './../../service/api/api';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from './../../service/UserContext';
 import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 import { ntColors } from '../../styles/colors/colors';
 import { Ionicons } from '@expo/vector-icons';
-import NameCard from '../../components/NameCard';
+import NameCard from '../../components/NameCard/index';
 
 export default function EscolherAluno() {
     const [alunos, setAlunos] = useState([]);
@@ -41,15 +41,15 @@ export default function EscolherAluno() {
 
     if (loading) {
         return (
-            <View>
-                <Text>Carregando...</Text>
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color={ntColors.ntBlueMain} />
             </View>
         );
     }
 
     if (!loading && alunos.length === 0) {
         return (
-            <View>
+            <View style={styles.container}>
                 <Text>Nenhum aluno encontrado.</Text>
             </View>
         );

@@ -1,4 +1,4 @@
-import api from '../../utils/api';
+import api, { initApi } from '../../utils/api';
 
 export const getAll = async (endpoint) => {
     const response = await api.get(`/${endpoint}`);

@@ -1,9 +1,11 @@
-import { router } from 'expo-router';
-import { ActivityIndicator, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ntFonts, ntFontSizes } from '../styles/fonts/fonts';
-import { ntColors } from './../styles/colors/colors';
 import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ReanimatedScreen } from 'react-native-reanimated';
+import { ntFonts, ntFontSizes } from '../styles/fonts/fonts';
+import { ntColors } from './../styles/colors/colors';
+import { registerRootComponent } from 'expo';
 
 export default function TelaInicial() {
     // Carrega as fontes do app
@@ -31,6 +33,7 @@ export default function TelaInicial() {
                 />
                 <Text style={styles.title}>CRUD com notas escolares</Text>
             </View>
+
             <View style={styles.buttonContent}>
                 <TouchableOpacity
                     style={styles.button}
@@ -49,6 +52,7 @@ export default function TelaInicial() {
                         />
                     </LinearGradient>
                 </TouchableOpacity>
+
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => router.push('aluno/escolher')}
@@ -67,10 +71,13 @@ export default function TelaInicial() {
                     </LinearGradient>
                 </TouchableOpacity>
             </View>
+
             <Text style={styles.credits}>Feito por Felipe Ferreira</Text>
         </View>
     );
 }
+
+registerRootComponent(TelaInicial);
 
 const styles = StyleSheet.create({
     container: {

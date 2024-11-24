@@ -1,12 +1,12 @@
-import { Link, router, useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { Button, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import NameCard from '../../components/NameCard/index';
 import { UserContext } from '../../service/UserContext';
 import { getAll } from '../../service/api/api';
-import NameCard from '../../components/NameCard';
-import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 import { ntColors } from '../../styles/colors/colors';
-import { Ionicons } from '@expo/vector-icons';
+import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 
 export default function EscolherProf() {
     const [profs, setProfs] = useState([]);
@@ -49,15 +49,15 @@ export default function EscolherProf() {
 
     if (loading) {
         return (
-            <View>
-                <Text>Carregando...</Text>
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color={ntColors.ntBlueMain} />
             </View>
         );
     }
 
     if (!loading && profs.length === 0) {
         return (
-            <View>
+            <View style={styles.container}>
                 <Text>Nenhum professor encontrado.</Text>
             </View>
         );

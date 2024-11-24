@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { ntColors } from '../styles/colors/colors';
-import { ntFonts, ntFontSizes } from '../styles/fonts/fonts';
+import { ntColors } from '../../styles/colors/colors';
+import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 
 export default function NameCard({ name, onPress }) {
     return (

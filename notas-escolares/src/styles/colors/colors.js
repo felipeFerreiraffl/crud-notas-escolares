@@ -4,7 +4,7 @@ export const ntColors = {
   ntGray: "#A9A9A9",
   ntWhitePage: "#EDEDED",
   ntWhite: "#FFFFFF",
-  ntBlueMain: "#1E90FF",
+  ntBlueMain: "#015FBA",
   ntBlueSec: "#1F86EB",
   ntBlueTer: "#68A7E3",
   ntBlueQua: "#ADD1F3",
