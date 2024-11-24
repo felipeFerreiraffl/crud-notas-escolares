@@ -21,12 +21,14 @@ export default function TelaAluno() {
                         backgroundColor={ntColors.ntBlueMain}
                         screenName={'Notas'}
                         imageKey={'notas'}
+                        onPress={'/aluno/notas'}
                     />
 
                     <ScreenButton
                         backgroundColor={ntColors.ntBlueSec}
                         screenName={'Suas informações'}
                         imageKey={'infos'}
+                        onPress={'/aluno/infos'}
                     />
 
                     <ScreenButton

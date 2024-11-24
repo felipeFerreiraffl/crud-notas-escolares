@@ -9,6 +9,7 @@ import { UserContext } from '../../service/UserContext';
 export default function sobre() {
   const { user } = useContext(UserContext);
 
+  // Volta até a tela inicial do usuário baseado em seu tipo
   const handleBackToPage = () => {
     if (user.tipo === 'professor') {
       router.push('/professor');

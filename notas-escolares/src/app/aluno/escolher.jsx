@@ -1,12 +1,12 @@
-import { Link, router, useRouter } from 'expo-router';
-import { ActivityIndicator, Button, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { getAll } from './../../service/api/api';
-import { useContext, useEffect, useState } from 'react';
-import { UserContext } from './../../service/UserContext';
-import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
-import { ntColors } from '../../styles/colors/colors';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useContext, useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NameCard from '../../components/NameCard/index';
+import { ntColors } from '../../styles/colors/colors';
+import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
+import { getAll } from './../../service/api/api';
+import { UserContext } from './../../service/UserContext';
 
 export default function EscolherAluno() {
     const [alunos, setAlunos] = useState([]);
@@ -14,11 +14,13 @@ export default function EscolherAluno() {
     const router = useRouter();
     const { setUser } = useContext(UserContext);
 
+    // Seleciona e atribui informações do aluno, direcionando até a tela inicial
     const handleSelect = (aluno) => {
         setUser({ tipo: 'aluno', id: aluno.id, nome: aluno.nome });
         router.push('/aluno');
     }
 
+    // Renderiza os alunos existentes no banco
     useEffect(() => {
         const fetchAlunos = async () => {
             try {
@@ -39,6 +41,7 @@ export default function EscolherAluno() {
 
     }, []);
 
+    // Carregando os componentes
     if (loading) {
         return (
             <View style={styles.container}>

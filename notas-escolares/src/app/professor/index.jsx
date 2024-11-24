@@ -22,12 +22,14 @@ export default function TelaProfessor() {
                         backgroundColor={ntColors.ntBlueMain}
                         screenName={'Notas'}
                         imageKey={'notas'}
+                        onPress={'/professor/notas'}
                     />
 
                     <ScreenButton
                         backgroundColor={ntColors.ntBlueSec}
                         screenName={'Suas informações'}
                         imageKey={'infos'}
+                        onPress={'professor/infos'}
                     />
 
                     <ScreenButton
