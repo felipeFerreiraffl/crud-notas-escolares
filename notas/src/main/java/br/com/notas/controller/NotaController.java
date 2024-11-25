@@ -33,6 +33,11 @@ public class NotaController {
 		return serv.getNotaById(id);
 	}
 	
+	@GetMapping("/todas/aluno")
+	public List<Nota> getAllNotasbyAluno(Long alunoId) {
+		return serv.getAllNotasPorAluno(alunoId);
+	}
+	
 	@GetMapping("/aluno")
 	public List<Nota> getNotasByAluno(@RequestParam Long alunoId) {
 		return serv.getNotasbyAluno(alunoId);

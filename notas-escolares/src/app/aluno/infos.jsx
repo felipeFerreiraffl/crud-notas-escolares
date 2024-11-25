@@ -179,6 +179,10 @@ const styles = StyleSheet.create({
   editButton: {
     position: 'absolute',
     right: -47,
+  }, 
+  cancelButton: {
+    position: 'absolute',
+    right: -81,
   },
   infosContainer: {
     alignItems: 'flex-start',

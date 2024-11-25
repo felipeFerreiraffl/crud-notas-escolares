@@ -6,7 +6,7 @@ export default function NotasTableAluno({ dados, editable, onChangeText }) {
     const renderHeader = () => {
         return (
             <View style={styles.headerRow}>
-                <Text style={styles.cellHeader}>Matéria</Text>
+                <Text style={styles.firstHeaderColumn}>Matéria</Text>
                 <Text style={styles.cellHeader}>1º B</Text>
                 <Text style={styles.cellHeader}>2º B</Text>
                 <Text style={styles.cellHeader}>3º B</Text>
@@ -18,7 +18,7 @@ export default function NotasTableAluno({ dados, editable, onChangeText }) {
     const renderRow = ({ item }) => {
         return (
             <View style={styles.rowItens}>
-                <Text style={styles.cellItens}>
+                <Text style={styles.rowFirstColumn}>
                     {item.disciplina}
                 </Text>
                 {item.nota.map((nota, index) => (
@@ -51,40 +51,46 @@ export default function NotasTableAluno({ dados, editable, onChangeText }) {
 const styles = StyleSheet.create({
     table: {
         backgroundColor: ntColors.ntWhite,
-        // borderWidth: 2,
-        // borderColor: ntColors.ntBlack,
-        width: 342,
-        height: 'auto',
+        alignItems: 'stretch',
     },
     headerRow: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         backgroundColor: ntColors.ntBlueMain,
         paddingVertical: 16,
-        alignItems: 'center',
     },
     rowItens: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: ntColors.ntWhite,
-        paddingVertical: 6,
     },
     rowFirstColumn: {
+        width: 98,
         backgroundColor: ntColors.ntGray,
-        
+        paddingVertical: 6,
+        textAlign: 'center',
+        fontFamily: ntFonts.ntJakartaSansRegular,
+        fontSize: ntFontSizes.ntSize11,
     },
     cellHeader: {
         textAlign: 'center',
         fontFamily: ntFonts.ntJakartaSansBold,
         fontSize: ntFontSizes.ntSize12,
         color: ntColors.ntWhite,
-        alignItems: 'center',
+        width: 61,
+    },
+    firstHeaderColumn: {
+        textAlign: 'center',
+        fontFamily: ntFonts.ntJakartaSansBold,
+        fontSize: ntFontSizes.ntSize12,
+        color: ntColors.ntWhite,
+        width: 98,
     },
     cellItens: {
         textAlign: 'center',
         fontFamily: ntFonts.ntJakartaSansRegular,
         fontSize: ntFontSizes.ntSize11,
-        alignItems: 'center',
+        paddingHorizontal: 22,
+        width: 61,
     },
 });

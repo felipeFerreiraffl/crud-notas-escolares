@@ -15,7 +15,6 @@ export default function NotasAluno() {
         const response = await getNotaByAluno(user.id);
         const formattedNotas = response.map((nota) => ({
           id: nota.id,
-          aluno: nota.aluno.nome,
           disciplina: nota.disciplina.nome,
           nota: nota.valoresNota || [null, null, null, null],
         }));
@@ -53,7 +52,6 @@ export default function NotasAluno() {
       const updatedNotaObj = {
         id: notaId,
         valoresNota: updatedNota.find((n) => n.id === notaId).nota,
-        aluno: notaParaAtualizar.aluno,
         disciplina: notaParaAtualizar.disciplina,
       }
 

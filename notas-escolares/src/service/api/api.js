@@ -34,6 +34,6 @@ export const deleteObj = async (id, endpoint) => {
 
 // Específico para pegar as notas de um aluno
 export const getNotaByAluno = async (alunoId) => {
-    const response = await api.get(`/nota/aluno?alunoId=${alunoId}`);
+    const response = await api.get(`/nota/todas/aluno?alunoId=${alunoId}`);
     return response.data;
 }
