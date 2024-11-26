@@ -43,6 +43,11 @@ public class NotaController {
 		return serv.getNotasbyAluno(alunoId);
 	}
 	
+	@GetMapping("/disciplina")
+	public List<Nota> getNotasByDisciplina(@RequestParam Long discId) {
+		return serv.getNotaByDisciplina(discId);
+	}
+	
 	@PostMapping
 	public Nota createNota(@RequestBody Nota nota) {
 		return serv.createNota(nota);

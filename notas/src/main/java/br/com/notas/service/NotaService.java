@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.notas.model.Aluno;
 import br.com.notas.model.Disciplina;
 import br.com.notas.model.Nota;
+import br.com.notas.repository.AlunoRepository;
 import br.com.notas.repository.DisciplinaRepository;
 import br.com.notas.repository.NotaRepository;
 
@@ -20,6 +22,9 @@ public class NotaService {
 	
 	@Autowired
 	private DisciplinaRepository discRepo;
+	
+	@Autowired
+	private AlunoRepository alunoRepo;
 	
 	public List<Nota> getAllNotas() {
 		return repo.findAll();
@@ -52,6 +57,27 @@ public class NotaService {
 					.findFirst()
 					.orElseGet(() -> { // Cria uma nova nota com valores padrão
 						Nota notaVazia = new Nota();
+						notaVazia.setDisciplina(disciplina);
+						notaVazia.setValoresNota(new double[]{0, 0, 0, 0});
+						return notaVazia;
+					});
+		}).collect(Collectors.toList());
+	}
+	
+	public List<Nota> getNotaByDisciplina(Long discId) {
+		Disciplina disciplina = discRepo.findById(discId).orElseThrow(() -> new RuntimeException("Disciplina não encontrada."));
+		
+		List<Nota> notasDisciplina = repo.findByDisciplinaId(discId);
+		List<Aluno> alunos = alunoRepo.findAll();
+		
+		return alunos.stream().map(aluno -> {
+			// Verifica se já existe uma nota para uma disciplina
+			return notasDisciplina.stream()
+					.filter(nota -> nota.getAluno().getId().equals(aluno.getId()))
+					.findFirst()
+					.orElseGet(() -> { // Cria uma nova nota com valores padrão
+						Nota notaVazia = new Nota();
+						notaVazia.setAluno(aluno);
 						notaVazia.setDisciplina(disciplina);
 						notaVazia.setValoresNota(new double[]{0, 0, 0, 0});
 						return notaVazia;
