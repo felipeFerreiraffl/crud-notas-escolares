@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
+import NotasTableAluno from './../../components/NotasTable/index';
 import { UserContext } from './../../service/UserContext';
-import { getAll, getById, getNotaByAluno, updateObj } from './../../service/api/api';
-import NotasTable from '../../components/NotasTable';
+import { getNotaByAluno, updateObj } from './../../service/api/api';
+import { ntColors } from '../../styles/colors/colors';
 
 export default function NotasAluno() {
   const [notas, setNotas] = useState([]);
@@ -82,7 +83,7 @@ export default function NotasAluno() {
 
   return (
     <View style={styles.container}>
-      <NotasTable 
+      <NotasTableAluno 
         dados={notas}
         editable={user.tipo === 'professor'}
         onChangeText={user.tipo === 'professor' ? handleEditNota : null}
@@ -94,7 +95,7 @@ export default function NotasAluno() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: ntColors.ntWhitePage,
     alignItems: 'center',
     justifyContent: 'center',
   },

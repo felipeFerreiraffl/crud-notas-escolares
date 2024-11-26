@@ -37,3 +37,9 @@ export const getNotaByAluno = async (alunoId) => {
     const response = await api.get(`/nota/todas/aluno?alunoId=${alunoId}`);
     return response.data;
 }
+
+// Específico para pegar as notas por disciplina
+export const getNotaByDisciplina = async (disciplinaId) => {
+    const response = await api.get(`/nota/disciplina?discId=${disciplinaId}`);
+    return response.data;
+}
