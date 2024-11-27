@@ -14,7 +14,7 @@ export default function NotasProfessor({ disciplinaId }) {
   useEffect(() => {
     const fetchNotas = async () => {
       try {
-        const response = await getNotaByDisciplina(disciplinaId);
+        const response = await getNotaByDisciplina(3);
         console.log("Resposta da API ", response);
 
         if (!Array.isArray(response)) {

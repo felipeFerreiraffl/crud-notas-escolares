@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.notas.model.Disciplina;
@@ -30,6 +31,11 @@ public class DisciplinaController {
 	@GetMapping("/{id}")
 	public Disciplina getDiscbyId(@PathVariable Long id) {
 		return serv.getDisciplinaById(id);
+	}
+	
+	@GetMapping("/professor")
+	public List<Disciplina> getDisciplinaById(@RequestParam Long profId) {
+		return serv.getDisciplinaByProfessor(profId);
 	}
 	
 	@PostMapping

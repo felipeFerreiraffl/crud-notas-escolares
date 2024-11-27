@@ -30,6 +30,10 @@ public class DisciplinaService {
 		
 	}
 	
+	public List<Disciplina> getDisciplinaByProfessor(Long professorId) {
+		return repo.findByProfessorId(professorId); 
+	}
+	
 	public Disciplina createDisc(Disciplina disc) {
 		return repo.save(disc);
 	}
