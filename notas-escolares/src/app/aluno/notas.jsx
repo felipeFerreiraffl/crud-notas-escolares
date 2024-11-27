@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
-import NotasTableAluno from './../../components/NotasTable/index';
+import { ntColors } from '../../styles/colors/colors';
+import NotasTableAluno from './../../components/NotasTableAluno/index';
 import { UserContext } from './../../service/UserContext';
 import { getNotaByAluno, updateObj } from './../../service/api/api';
-import { ntColors } from '../../styles/colors/colors';
 
 export default function NotasAluno() {
   const [notas, setNotas] = useState([]);

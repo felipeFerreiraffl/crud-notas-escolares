@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import NotasTableProfessor from '../../components/NotasTableProfessor';
 import { getNotaByDisciplina } from '../../service/api/api';
 import { UserContext } from './../../service/UserContext';
+import { ntColors } from '../../styles/colors/colors';
 
 export default function NotasProfessor({ disciplinaId }) {
   const [notas, setNotas] = useState([]);
@@ -14,16 +15,31 @@ export default function NotasProfessor({ disciplinaId }) {
     const fetchNotas = async () => {
       try {
         const response = await getNotaByDisciplina(disciplinaId);
+        console.log("Resposta da API ", response);
+
+        if (!Array.isArray(response)) {
+          throw new Error("Resposta inesperado da API");
+        }
 
         const formattedNotas = response.map((nota) => ({
-          id: nota.id,
-          aluno: nota.aluno ? nome.aluno.nome : "Aluno não encontrado",
-          nota: nota.valoresNota || [null, null, null, null],
+          id: nota.id ?? `temp-${nota.aluno?.id}`,
+          disciplinaId: nota.disciplina?.id,
+          disciplina: nota.disciplina?.nome,
+          professor: nota.disciplina?.professor?.nome,
+          aluno: nota.aluno?.nome || "Aluno não encontrado",
+          nota: Array.isArray(nota.valoresNota) ? nota.valoresNota : [null, null, null, null],
         }));
 
-        console.log(formattedNotas);
-        setNotas(formattedNotas);
-        setDisciplina(response[0]?.disciplina?.nome || "Disciplina");
+        const sectionsData = [
+          {
+            title: response[0]?.disciplina?.nome ?? "Disciplina não especificada",
+            data: formattedNotas,
+          }
+        ];
+
+        console.log("Dados para SectionList: ", sectionsData);
+        setNotas(sectionsData);
+        setDisciplina(response[0]?.disciplina?.nome ?? "Disciplina não especificada");
 
       } catch (error) {
         console.error("Erro ao buscar as notas da disciplina: ", error);
@@ -66,6 +82,8 @@ export default function NotasProfessor({ disciplinaId }) {
         disciplina: { id: disciplinaId },
       };
 
+      console.log("Objeto para atualizar", updatedNotaObj);
+
       await updateObj(notaId, "nota", updatedNotaObj);
       Alert.alert("Sucesso", "Nota atualizada com sucesso!");
     } catch (error) {
@@ -76,15 +94,15 @@ export default function NotasProfessor({ disciplinaId }) {
 
   if (loading) {
     return (
-      <View>
-        <Text>Carregando...</Text>
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color={ntColors.ntBlueMain} />
       </View>
     );
   }
 
   if (!loading && notas.length === 0) {
     return (
-      <View>
+      <View style={styles.container}>
         <Text>Nenhum dado encontrado.</Text>
       </View>
     );
@@ -104,7 +122,7 @@ export default function NotasProfessor({ disciplinaId }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: ntColors.ntWhitePage,
     alignItems: 'center',
     justifyContent: 'center',
   },
