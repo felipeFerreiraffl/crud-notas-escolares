@@ -43,3 +43,8 @@ export const getNotaByDisciplina = async (disciplinaId) => {
     const response = await api.get(`/nota/disciplina?discId=${disciplinaId}`);
     return response.data;
 }
+
+export const getDisciplinaByProfId = async (profId) => {
+    const response = await api.get(`/disciplina/professor?profId=${profId}`);
+    return response.data;
+}

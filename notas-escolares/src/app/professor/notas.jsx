@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import NotasTableProfessor from '../../components/NotasTableProfessor';
-import { getNotaByDisciplina } from '../../service/api/api';
+import { getDisciplinaByProfId, getNotaByDisciplina } from '../../service/api/api';
 import { UserContext } from './../../service/UserContext';
 import { ntColors } from '../../styles/colors/colors';
 
@@ -14,7 +14,14 @@ export default function NotasProfessor({ disciplinaId }) {
   useEffect(() => {
     const fetchNotas = async () => {
       try {
-        const response = await getNotaByDisciplina(3);
+        const disciplinas = await getDisciplinaByProfId(user.id);
+        if (!disciplinas || disciplinas.length === 0) {
+          throw new Error("Nenhuma disciplina encontrada para o professor");
+        }
+
+        const disciplinaAtual = disciplinas[0];
+
+        const response = await getNotaByDisciplina(disciplinaAtual.id);
         console.log("Resposta da API ", response);
 
         if (!Array.isArray(response)) {
@@ -32,14 +39,14 @@ export default function NotasProfessor({ disciplinaId }) {
 
         const sectionsData = [
           {
-            title: response[0]?.disciplina?.nome ?? "Disciplina não especificada",
+            title: disciplinaAtual.nome,
             data: formattedNotas,
           }
         ];
 
         console.log("Dados para SectionList: ", sectionsData);
         setNotas(sectionsData);
-        setDisciplina(response[0]?.disciplina?.nome ?? "Disciplina não especificada");
+        setDisciplina(disciplinaAtual.nome);
 
       } catch (error) {
         console.error("Erro ao buscar as notas da disciplina: ", error);
@@ -52,7 +59,7 @@ export default function NotasProfessor({ disciplinaId }) {
 
     fetchNotas();
 
-  }, [disciplinaId]);
+  }, [user, disciplinaId]);
 
   const handleEditNota = async (notaId, index, newValor) => {
     try {
