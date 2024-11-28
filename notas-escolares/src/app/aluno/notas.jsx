@@ -4,6 +4,10 @@ import { ntColors } from '../../styles/colors/colors';
 import NotasTableAluno from './../../components/NotasTableAluno/index';
 import { UserContext } from './../../service/UserContext';
 import { getNotaByAluno, updateObj } from './../../service/api/api';
+import { getAll, getById, getNotaByAluno, updateObj } from './../../service/api/api';
+import { ntColors } from '../../styles/colors/colors';
+import SituationCard from '../../components/SituationCard';
+import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 
 export default function NotasAluno() {
   const [notas, setNotas] = useState([]);
@@ -21,7 +25,9 @@ export default function NotasAluno() {
         }));
 
         console.log(formattedNotas);
-        setNotas(formattedNotas);
+
+        const notasComMedia = calcMedias(formattedNotas);
+        setNotas(notasComMedia);
 
       } catch (error) {
         console.error("Erro ao buscar as notas do aluno: ", error);
@@ -43,10 +49,10 @@ export default function NotasAluno() {
         throw new Error("Nota não localizada");
       }
 
-      const updatedNota = notas.map(((nota) => 
+      const updatedNota = notas.map(((nota) =>
         nota.id === notaId
-        ? { ...nota, notas: nota.notas.map((val, i) => (i === index ? parseFloat(newValor) : val)) }
-        : nota
+          ? { ...nota, notas: nota.notas.map((val, i) => (i === index ? parseFloat(newValor) : val)) }
+          : nota
       ));
       setNotas(updatedNota);
 
@@ -58,11 +64,30 @@ export default function NotasAluno() {
 
       await updateObj(notaId, 'nota', updatedNotaObj);
       Alert.alert("Sucesso", "Nota atualizada com sucesso!");
-      
+
     } catch (error) {
       console.error("Erro ao atualizar nota: ", error);
       Alert.alert("Erro", "Erro ao atualizar na nota");
     }
+  };
+
+  const calcMedias = (notas) => {
+    return notas.map((nota) => {
+      const soma = nota.nota.reduce((acc, val) => acc + (val || 0), 0); // Soma as notas
+      const qtdNotas = nota.nota.filter((val) => val != null).length || 1; // Evita divisão por zero
+      const media = soma / qtdNotas;
+
+      return {
+        ...nota,
+        media: parseFloat(media.toFixed(2)), // Arredonda a média para duas casas decimais
+      }
+    });
+  }
+
+  const handleCardColor = (media) => {
+    if (media >= 6.5) return ntColors.ntGreenApv; 
+    if (media >= 5) return ntColors.ntYellowRec;
+    return ntColors.ntRedRep; 
   }
 
   if (loading) {
@@ -83,11 +108,27 @@ export default function NotasAluno() {
 
   return (
     <View style={styles.container}>
-      <NotasTableAluno 
+      <Text style={styles.title}>Notas</Text>    
+      <NotasTableAluno
         dados={notas}
         editable={user.tipo === 'professor'}
         onChangeText={user.tipo === 'professor' ? handleEditNota : null}
       />
+      <View style={styles.situationContainer}>
+        <Text style={styles.title}>Situação</Text>
+        <FlatList 
+          style={styles.situationList}
+          data={notas}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <SituationCard 
+              titulo={item.disciplina}
+              media={item.media}
+              background={handleCardColor(item.media)}
+            />
+          )}
+        />
+      </View>
     </View>
   );
 }
@@ -98,5 +139,18 @@ const styles = StyleSheet.create({
     backgroundColor: ntColors.ntWhitePage,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  situationContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontFamily: ntFonts.ntQuicksandBold,
+    fontSize: ntFontSizes.ntSize24,
+    color: ntColors.ntBlack,
+  },
+  situationList: {
+    maxHeight: 159,
   },
 });
