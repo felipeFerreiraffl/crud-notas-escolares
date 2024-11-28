@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useContext, useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SituationCard from '../../components/SituationCard';
 import SituationIndicator from '../../components/SituationIndicator';
 import { ntColors } from '../../styles/colors/colors';
@@ -81,15 +81,15 @@ export default function NotasAluno() {
   if (loading) {
     return (
       <View>
-        <Text>Carregando...</Text>
+        <ActivityIndicator size="large" color={ntColors.ntBlueMain} />
       </View>
     );
   }
 
   if (!loading && notas.length === 0) {
     return (
-      <View>
-        <Text>Nenhum dado encontrado.</Text>
+      <View style={styles.container}>
+        <Text style={styles.loading}>Nenhum dado encontrado</Text>
       </View>
     );
   };
@@ -125,7 +125,8 @@ export default function NotasAluno() {
       />
 
       <View style={styles.situationContainer}>
-        <Text style={styles.title}>Situação</Text>
+        <Text style={styles.secondTitle}>Situação</Text>
+        
         <FlatList
           style={styles.situationList}
           data={notas}
@@ -138,15 +139,18 @@ export default function NotasAluno() {
             />
           )}
         />
+
         <View style={styles.situationIndicatorContainer}>
           <SituationIndicator
             color={ntColors.ntGreenApv}
             text={"Aprovado"}
           />
+
           <SituationIndicator
             color={ntColors.ntYellowRec}
             text={"Recuperação"}
           />
+
           <SituationIndicator
             color={ntColors.ntRedRep}
             text={"Reprovado"}
@@ -174,11 +178,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
+  loading: {
+    fontFamily: ntFonts.ntQuicksandBold,
+    fontSize: ntFontSizes.ntSize20,
+    color: ntColors.ntBlack,
+  },
   title: {
     fontFamily: ntFonts.ntQuicksandBold,
     fontSize: ntFontSizes.ntSize24,
     color: ntColors.ntBlack,
     marginTop: 84,
+  },
+  secondTitle: {
+    fontFamily: ntFonts.ntQuicksandBold,
+    fontSize: ntFontSizes.ntSize24,
+    color: ntColors.ntBlack,
   },
   situationList: {
     maxHeight: 159,
@@ -188,7 +202,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 32,
+    // gap: 32,
     marginTop: 22,
   },
 });

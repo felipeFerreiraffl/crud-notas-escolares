@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NameCard from '../../components/NameCard/index';
 import { UserContext } from '../../service/UserContext';
-import { getAll } from '../../service/api/api';
+import { createObj, deleteObj, getAll } from '../../service/api/api';
 import { ntColors } from '../../styles/colors/colors';
 import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 
@@ -12,7 +12,7 @@ export default function EscolherProf() {
     const [profs, setProfs] = useState([]);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
-    const { setUser } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
 
     const handleSelect = (prof) => {
         setUser({ tipo: 'professor', id: prof.id, nome: prof.nome });
@@ -39,12 +39,24 @@ export default function EscolherProf() {
 
     }, []);
 
-    const createProf = (prof) => {
+    const createProf = async () => {
+        try {
+            const response = await createObj('professor');
 
+        } catch (error) {
+            console.error("Erro ao criar professor", error);
+            Alert.alert("Erro", "Erro ao criar professor");
+        }
     }
 
-    const deleteProf = () => {
+    const deleteProf = async (profId) => {
+        try {
+            const response = await deleteObj(profId, 'professor');
 
+        } catch (error) {
+            console.error("Erro ao criar professor", error);
+            Alert.alert("Erro", "Erro ao criar professor");
+        }
     }
 
     if (loading) {
@@ -75,10 +87,14 @@ export default function EscolherProf() {
             <View style={styles.listContent}>
                 <Text style={styles.listTitle}>Selecione seu nome, professor</Text>
                 <View style={styles.listButtonsContent}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={createProf}
+                    >
                         <Ionicons name='add-circle-outline' size={28} color={ntColors.ntBlack} />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={deleteProf(user.id)}
+                    >
                         <Ionicons name='close-circle-outline' size={28} color={ntColors.ntBlack} />
                     </TouchableOpacity>
                 </View>
