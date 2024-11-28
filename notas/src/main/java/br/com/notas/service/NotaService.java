@@ -1,5 +1,6 @@
 package br.com.notas.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,8 +53,8 @@ public class NotaService {
 		
 		return todasDisciplinas.stream().map(disciplina -> {
 			// Verifica se já existe uma nota para uma disciplina
-			return notasAluno.stream()
-					.filter(nota -> nota.getDisciplina().getId().equals(disciplina.getId()))
+			Nota nota = notasAluno.stream()
+					.filter(n -> n.getDisciplina().getId().equals(disciplina.getId()))
 					.findFirst()
 					.orElseGet(() -> { // Cria uma nova nota com valores padrão
 						Nota notaVazia = new Nota();
@@ -61,6 +62,10 @@ public class NotaService {
 						notaVazia.setValoresNota(new double[]{0, 0, 0, 0});
 						return notaVazia;
 					});
+			
+			nota.setMedia(Arrays.stream(nota.getValoresNota()).average().orElse(0.0));
+			
+			return nota;
 		}).collect(Collectors.toList());
 	}
 	
@@ -72,8 +77,8 @@ public class NotaService {
 		
 		return alunos.stream().map(aluno -> {
 			// Verifica se já existe uma nota para uma disciplina
-			return notasDisciplina.stream()
-					.filter(nota -> nota.getAluno().getId().equals(aluno.getId()))
+			Nota nota = notasDisciplina.stream()
+					.filter(n -> n.getAluno().getId().equals(aluno.getId()))
 					.findFirst()
 					.orElseGet(() -> { // Cria uma nova nota com valores padrão
 						Nota notaVazia = new Nota();
@@ -82,6 +87,11 @@ public class NotaService {
 						notaVazia.setValoresNota(new double[]{0, 0, 0, 0});
 						return notaVazia;
 					});
+			
+			nota.setMedia(Arrays.stream(nota.getValoresNota()).average().orElse(0.0));
+			
+			return nota;
+			
 		}).collect(Collectors.toList());
 	}
 	

@@ -1,11 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 import { ntColors } from '../../styles/colors/colors';
 import NotasTableAluno from './../../components/NotasTableAluno/index';
 import { UserContext } from './../../service/UserContext';
 import { getNotaByAluno, updateObj } from './../../service/api/api';
-import { getAll, getById, getNotaByAluno, updateObj } from './../../service/api/api';
-import { ntColors } from '../../styles/colors/colors';
 import SituationCard from '../../components/SituationCard';
 import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 
@@ -22,12 +20,12 @@ export default function NotasAluno() {
           id: nota.id,
           disciplina: nota.disciplina.nome,
           nota: nota.valoresNota || [null, null, null, null],
+          media: nota.media.toFixed(2),
         }));
 
         console.log(formattedNotas);
 
-        const notasComMedia = calcMedias(formattedNotas);
-        setNotas(notasComMedia);
+        setNotas(formattedNotas);
 
       } catch (error) {
         console.error("Erro ao buscar as notas do aluno: ", error);
@@ -70,19 +68,6 @@ export default function NotasAluno() {
       Alert.alert("Erro", "Erro ao atualizar na nota");
     }
   };
-
-  const calcMedias = (notas) => {
-    return notas.map((nota) => {
-      const soma = nota.nota.reduce((acc, val) => acc + (val || 0), 0); // Soma as notas
-      const qtdNotas = nota.nota.filter((val) => val != null).length || 1; // Evita divisão por zero
-      const media = soma / qtdNotas;
-
-      return {
-        ...nota,
-        media: parseFloat(media.toFixed(2)), // Arredonda a média para duas casas decimais
-      }
-    });
-  }
 
   const handleCardColor = (media) => {
     if (media >= 6.5) return ntColors.ntGreenApv; 

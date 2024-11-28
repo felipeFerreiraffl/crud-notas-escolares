@@ -24,6 +24,7 @@ public class Nota {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private double[] valoresNota = new double[4];
+	private double media;
 	
 	@ManyToOne
 	@JoinColumn(name = "aluno_id")

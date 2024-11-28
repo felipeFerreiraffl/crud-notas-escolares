@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, FlatList } from 'react-native';
 import NotasTableProfessor from '../../components/NotasTableProfessor';
 import { getDisciplinaByProfId, getNotaByDisciplina } from '../../service/api/api';
 import { UserContext } from './../../service/UserContext';
 import { ntColors } from '../../styles/colors/colors';
+import SituationCard from '../../components/SituationCard';
+import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 
 export default function NotasProfessor({ disciplinaId }) {
   const [notas, setNotas] = useState([]);
@@ -32,9 +34,9 @@ export default function NotasProfessor({ disciplinaId }) {
           id: nota.id ?? `temp-${nota.aluno?.id}`,
           disciplinaId: nota.disciplina?.id,
           disciplina: nota.disciplina?.nome,
-          professor: nota.disciplina?.professor?.nome,
           aluno: nota.aluno?.nome || "Aluno não encontrado",
           nota: Array.isArray(nota.valoresNota) ? nota.valoresNota : [null, null, null, null],
+          media: nota.media.toFixed(2),
         }));
 
         const sectionsData = [
@@ -44,7 +46,6 @@ export default function NotasProfessor({ disciplinaId }) {
           }
         ];
 
-        console.log("Dados para SectionList: ", sectionsData);
         setNotas(sectionsData);
         setDisciplina(disciplinaAtual.nome);
 
@@ -99,6 +100,12 @@ export default function NotasProfessor({ disciplinaId }) {
     }
   };
 
+  const handleCardColor = (media) => {
+    if (media >= 6.5) return ntColors.ntGreenApv;
+    if (media >= 5) return ntColors.ntYellowRec;
+    return ntColors.ntRedRep;
+  }
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -117,11 +124,27 @@ export default function NotasProfessor({ disciplinaId }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Notas</Text>
       <NotasTableProfessor
         dados={notas}
         editable={user.tipo === 'professor'}
         onChangeText={user.tipo === 'professor' ? handleEditNota : null}
       />
+      <View style={styles.situationContainer}>
+        <Text style={styles.title}>Situação</Text>
+        <FlatList 
+          style={styles.situationList}
+          data={notas[0].data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <SituationCard 
+              titulo={item.aluno}
+              media={item.media}
+              background={handleCardColor(item.media)}
+            />
+          )}
+        />
+      </View>
     </View>
   );
 }
@@ -132,5 +155,18 @@ const styles = StyleSheet.create({
     backgroundColor: ntColors.ntWhitePage,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  situationContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontFamily: ntFonts.ntQuicksandBold,
+    fontSize: ntFontSizes.ntSize24,
+    color: ntColors.ntBlack,
+  },
+  situationList: {
+    maxHeight: 159,
   },
 });
