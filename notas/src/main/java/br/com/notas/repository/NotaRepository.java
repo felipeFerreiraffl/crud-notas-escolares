@@ -9,4 +9,5 @@ import br.com.notas.model.Nota;
 public interface NotaRepository extends JpaRepository<Nota, Long> {
 	List<Nota> findByAlunoId(Long alunoId);
 	List<Nota> findByDisciplinaId(Long discId);
+	void deleteByDisciplinaId(Long disciplinaId);
 }

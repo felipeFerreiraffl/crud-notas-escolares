@@ -1,11 +1,14 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useContext, useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import SituationCard from '../../components/SituationCard';
+import SituationIndicator from '../../components/SituationIndicator';
 import { ntColors } from '../../styles/colors/colors';
+import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 import NotasTableAluno from './../../components/NotasTableAluno/index';
 import { UserContext } from './../../service/UserContext';
 import { getNotaByAluno, updateObj } from './../../service/api/api';
-import SituationCard from '../../components/SituationCard';
-import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
+import { router } from 'expo-router';
 
 export default function NotasAluno() {
   const [notas, setNotas] = useState([]);
@@ -70,9 +73,9 @@ export default function NotasAluno() {
   };
 
   const handleCardColor = (media) => {
-    if (media >= 6.5) return ntColors.ntGreenApv; 
+    if (media >= 6.5) return ntColors.ntGreenApv;
     if (media >= 5) return ntColors.ntYellowRec;
-    return ntColors.ntRedRep; 
+    return ntColors.ntRedRep;
   }
 
   if (loading) {
@@ -89,30 +92,66 @@ export default function NotasAluno() {
         <Text>Nenhum dado encontrado.</Text>
       </View>
     );
+  };
+
+  // Volta até a tela inicial do usuário baseado em seu tipo
+  const handleBackToPage = () => {
+    if (user.tipo === 'professor') {
+      router.push('/professor');
+    } else if (user.tipo === 'aluno') {
+      router.push('/aluno');
+    }
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Notas</Text>    
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={handleBackToPage}
+      >
+        <Ionicons
+          name='arrow-back-circle-outline'
+          size={37}
+          color={ntColors.ntBlack}
+        />
+      </TouchableOpacity>
+
+      <Text style={styles.title}>Notas</Text>
+      
       <NotasTableAluno
         dados={notas}
         editable={user.tipo === 'professor'}
         onChangeText={user.tipo === 'professor' ? handleEditNota : null}
       />
+
       <View style={styles.situationContainer}>
         <Text style={styles.title}>Situação</Text>
-        <FlatList 
+        <FlatList
           style={styles.situationList}
           data={notas}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <SituationCard 
+            <SituationCard
               titulo={item.disciplina}
               media={item.media}
               background={handleCardColor(item.media)}
             />
           )}
         />
+        <View style={styles.situationIndicatorContainer}>
+          <SituationIndicator
+            color={ntColors.ntGreenApv}
+            text={"Aprovado"}
+          />
+          <SituationIndicator
+            color={ntColors.ntYellowRec}
+            text={"Recuperação"}
+          />
+          <SituationIndicator
+            color={ntColors.ntRedRep}
+            text={"Reprovado"}
+          />
+        </View>
       </View>
     </View>
   );
@@ -125,17 +164,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  backButton: {
+    position: 'absolute',
+    top: 16,
+    left: 31,
+  },
   situationContainer: {
-    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 16,
   },
   title: {
     fontFamily: ntFonts.ntQuicksandBold,
     fontSize: ntFontSizes.ntSize24,
     color: ntColors.ntBlack,
+    marginTop: 84,
   },
   situationList: {
     maxHeight: 159,
+    marginTop: 25,
+  },
+  situationIndicatorContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 32,
+    marginTop: 22,
   },
 });

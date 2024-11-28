@@ -1,10 +1,10 @@
-import { Link, router } from 'expo-router';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { useContext } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { UserContext } from '../../service/UserContext';
 import { ntColors } from '../../styles/colors/colors';
 import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
-import { useContext } from 'react';
-import { UserContext } from '../../service/UserContext';
 
 export default function sobre() {
   const { user } = useContext(UserContext);

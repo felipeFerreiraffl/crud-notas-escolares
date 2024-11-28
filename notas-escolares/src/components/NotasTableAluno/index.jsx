@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     table: {
         backgroundColor: ntColors.ntWhite,
         alignItems: 'stretch',
+        marginTop: 21,
     },
     headerRow: {
         flexDirection: 'row',

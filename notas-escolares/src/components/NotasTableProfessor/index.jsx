@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     table: {
         backgroundColor: ntColors.ntWhite,
         alignItems: 'stretch',
+        marginTop: 21,
     },
     titleContent: {
         backgroundColor: ntColors.ntDarkGray,

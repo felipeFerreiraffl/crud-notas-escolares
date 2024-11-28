@@ -32,6 +32,8 @@ export default function NotasProfessor({ disciplinaId }) {
 
         const formattedNotas = response.map((nota) => ({
           id: nota.id ?? `temp-${nota.aluno?.id}`,
+          professorId: nota.disciplina.professor.id,
+          professor: nota.disciplina.professor,
           disciplinaId: nota.disciplina?.id,
           disciplina: nota.disciplina?.nome,
           aluno: nota.aluno?.nome || "Aluno não encontrado",
