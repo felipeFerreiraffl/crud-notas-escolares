@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
+import { ntColors } from '../../styles/colors/colors';
+import NotasTableAluno from './../../components/NotasTableAluno/index';
 import { UserContext } from './../../service/UserContext';
+import { getNotaByAluno, updateObj } from './../../service/api/api';
 import { getAll, getById, getNotaByAluno, updateObj } from './../../service/api/api';
-import NotasTable from '../../components/NotasTable';
 import { ntColors } from '../../styles/colors/colors';
 import SituationCard from '../../components/SituationCard';
 import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
@@ -106,8 +108,8 @@ export default function NotasAluno() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Notas</Text>
-      <NotasTable
+      <Text style={styles.title}>Notas</Text>    
+      <NotasTableAluno
         dados={notas}
         editable={user.tipo === 'professor'}
         onChangeText={user.tipo === 'professor' ? handleEditNota : null}
