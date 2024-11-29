@@ -58,9 +58,12 @@ public class NotaService {
 					.findFirst()
 					.orElseGet(() -> { // Cria uma nova nota com valores padrão
 						Nota notaVazia = new Nota();
+						notaVazia.setAluno(alunoRepo.findById(alunoId).orElseThrow(() -> 
+							new RuntimeException("Aluno não encontrado")));
 						notaVazia.setDisciplina(disciplina);
 						notaVazia.setValoresNota(new double[]{0, 0, 0, 0});
-						return notaVazia;
+						notaVazia.setMedia(0.0);
+						return repo.save(notaVazia);
 					});
 			
 			nota.setMedia(Arrays.stream(nota.getValoresNota()).average().orElse(0.0));
@@ -85,7 +88,7 @@ public class NotaService {
 						notaVazia.setAluno(aluno);
 						notaVazia.setDisciplina(disciplina);
 						notaVazia.setValoresNota(new double[]{0, 0, 0, 0});
-						return notaVazia;
+						return repo.save(notaVazia);
 					});
 			
 			nota.setMedia(Arrays.stream(nota.getValoresNota()).average().orElse(0.0));

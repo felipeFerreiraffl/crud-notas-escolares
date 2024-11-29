@@ -1,16 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NameCard from '../../components/NameCard/index';
 import { UserContext } from '../../service/UserContext';
 import { createObj, deleteObj, getAll } from '../../service/api/api';
 import { ntColors } from '../../styles/colors/colors';
 import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
+import ModalCreate from '../../components/ModalCreate';
 
 export default function EscolherProf() {
     const [profs, setProfs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
+
     const router = useRouter();
     const { user, setUser } = useContext(UserContext);
 
@@ -88,7 +91,7 @@ export default function EscolherProf() {
                 <Text style={styles.listTitle}>Selecione seu nome, professor</Text>
                 <View style={styles.listButtonsContent}>
                     <TouchableOpacity
-                        onPress={createProf}
+                        onPress={() => setModalVisible(true)}
                     >
                         <Ionicons name='add-circle-outline' size={28} color={ntColors.ntBlack} />
                     </TouchableOpacity>
@@ -101,13 +104,31 @@ export default function EscolherProf() {
                 <FlatList
                     style={styles.listNomes}
                     data={profs}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item, index) => item.id.toString()}
                     renderItem={({ item }) => (
                         <NameCard name={item.nome} onPress={() => handleSelect(item)} />
                     )}
                 />
             </View>
             <Text style={styles.credits}>Feito por Felipe Ferreira</Text>
+
+            <Modal
+                visible={modalVisible}
+                transparent={true}
+                animationType='fade'
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View>
+                    <ModalCreate 
+                        user={"aluno"}
+                        field1={"Nome"}
+                        field2={"Data de nascimento"}
+                        field3={"CPF"}
+                        field4={"Área de ensino"}
+                        onPress2={() => setModalVisible(false)}
+                    />
+                </View>
+            </Modal>
         </View>
     );
 }

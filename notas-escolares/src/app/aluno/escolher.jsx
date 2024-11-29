@@ -1,16 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NameCard from '../../components/NameCard/index';
 import { ntColors } from '../../styles/colors/colors';
 import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
 import { getAll } from './../../service/api/api';
 import { UserContext } from './../../service/UserContext';
+import ModalCreate from '../../components/ModalCreate';
 
 export default function EscolherAluno() {
     const [alunos, setAlunos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
     const router = useRouter();
     const { setUser } = useContext(UserContext);
 
@@ -70,7 +72,7 @@ export default function EscolherAluno() {
             <View style={styles.listContent}>
                 <Text style={styles.listTitle}>Selecione seu nome, aluno</Text>
                 <View style={styles.listButtonsContent}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setModalVisible(true)}>
                         <Ionicons name='add-circle-outline' size={28} color={ntColors.ntBlack} />
                     </TouchableOpacity>
                     <TouchableOpacity>
@@ -87,6 +89,24 @@ export default function EscolherAluno() {
                 />
             </View>
             <Text style={styles.credits}>Feito por Felipe Ferreira</Text>
+
+            <Modal
+                visible={modalVisible}
+                transparent={true}
+                animationType='fade'
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <ModalCreate 
+                        user={"aluno"}
+                        field1={"Nome"}
+                        field2={"Data de nascimento"}
+                        field3={"CPF"}
+                        field4={"Turma"}
+                        onPress2={() => setModalVisible(false)}
+                    />
+                </View>
+            </Modal>
         </View>
     );
 }
@@ -146,5 +166,11 @@ const styles = StyleSheet.create({
         fontFamily: ntFonts.ntJakartaSansRegular,
         fontSize: ntFontSizes.ntSize10,
         marginBottom: 15,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
