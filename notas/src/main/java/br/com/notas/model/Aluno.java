@@ -34,7 +34,6 @@ public class Aluno {
 	private String turma;
 	
 	// Remover as notas associadas em cascata
-	@JsonManagedReference
 	@OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Nota> notas;
 }

@@ -169,7 +169,7 @@ export default function EscolherAluno() {
             >
                 <View style={styles.modalOverlay}>
                     <ModalCreate
-                        user={"aluno"}
+                        usuario={"aluno"}
                         field1={"Nome"}
                         field2={"Data de nascimento"}
                         field3={"CPF"}

@@ -40,7 +40,7 @@ export default function NotasProfessor({ disciplinaId }) {
           professor: nota.disciplina.professor.nome,
           disciplinaId: nota.disciplina?.id,
           disciplina: nota.disciplina?.nome,
-          aluno: nota.aluno?.nome || "Aluno não encontrado",
+          aluno: nota.aluno ? nota.aluno.nome : "Aluno não encontrado",
           nota: Array.isArray(nota.valoresNota) ? nota.valoresNota : [null, null, null, null],
           media: nota.media.toFixed(2),
         }));

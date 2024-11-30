@@ -1,6 +1,10 @@
 package br.com.notas.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +24,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Nota {
 	
 	@Id
@@ -30,7 +35,6 @@ public class Nota {
 	
 	@ManyToOne
 	@JoinColumn(name = "aluno_id")
-	@JsonBackReference
 	private Aluno aluno;
 	
 	@ManyToOne

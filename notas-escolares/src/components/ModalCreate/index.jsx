@@ -6,19 +6,21 @@ import { Text } from 'react-native';
 import { View } from 'react-native';
 import { ntColors } from './../../styles/colors/colors';
 import { ntFonts, ntFontSizes } from './../../styles/fonts/fonts';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { UserContext } from '../../service/UserContext';
 
-export default function ModalCreate({ user, field1, field2, field3, field4, onPress1, onPress2 }) {
+export default function ModalCreate({ usuario, field1, field2, field3, field4, onPress1, onPress2 }) {
     const [nome, setNome] = useState('');
     const [dtNascimento, setDtNascimento] = useState('');
     const [cpf, setCpf] = useState('');
     const [turma, setTurma] = useState('');
     const [areaEnsino, setAreaEnsino] = useState('');
+    const { user } = useContext(UserContext);
     
     return (
         <View style={styles.modal}>
             <View style={styles.modalTitleContainer}>
-                <Text style={styles.modalTitle}>Criar {user}</Text>
+                <Text style={styles.modalTitle}>Criar {usuario}</Text>
             </View>
             <View style={styles.modalFields}>
                 <View style={styles.modalField}>
@@ -55,7 +57,13 @@ export default function ModalCreate({ user, field1, field2, field3, field4, onPr
                 </View>
             </View>
             <View style={styles.modalButtons}>
-                <TouchableOpacity onPress={() => onPress1({ nome, dtNascimento, cpf, turma, areaEnsino})}>
+                <TouchableOpacity 
+                onPress={user.tipo === 'aluno' ? 
+                    () => onPress1({ nome, dtNascimento, cpf, turma})
+                    :
+                    () => onPress1({ nome, dtNascimento, cpf, areaEnsino })
+                }
+                >
                     <Ionicons
                         name='checkmark-circle-outline'
                         size={27}

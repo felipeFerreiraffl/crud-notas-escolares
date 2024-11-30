@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NameCard from '../../components/NameCard/index';
 import { UserContext } from '../../service/UserContext';
 import { createObj, deleteObj, getAll } from '../../service/api/api';
@@ -13,6 +13,7 @@ export default function EscolherProf() {
     const [profs, setProfs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
+    const [deleteMode, setDeleteMode] = useState(false); // Estado para deletar cards
 
     const router = useRouter();
     const { setUser } = useContext(UserContext);
@@ -41,6 +42,67 @@ export default function EscolherProf() {
         fetchProfs();
 
     }, []);
+
+    // Cria um usuário
+    const handleCreateUser = async (userData) => {
+        try {
+            await createObj('professor', userData);
+            setModalVisible(false); // Fecha o modal após a criação
+            refreshUserList();
+
+        } catch (error) {
+            console.error("Erro ao criar professor: ", error.message);
+
+        }
+    }
+
+    // Atualiza a lista após deletar ou criar um usuário
+    const refreshUserList = async () => {
+        setLoading(true);
+
+        try {
+            const updatedList = await getAll('professor');
+            setProfs(updatedList); // Atualiza o estado depois de atualizar a lista
+
+        } catch (error) {
+            console.error("Erro ao atualizar a lista: ", error.message);
+
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Deleta ao clicar no card
+    const handleCardPress = async (user) => {
+        if (deleteMode) {
+            Alert.alert(
+                'Confirmar exclusão',
+                `Deseja excluir ${user.nome}`,
+                [
+                    {
+                        text: 'Cancelar',
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Excluir',
+                        onPress: async () => {
+                            try {
+                                await deleteObj(user.id, 'professor');
+                                refreshUserList();
+
+                            } catch (error) {
+                                console.error("Erro ao excluir professor: ", error.message);
+
+                            }
+                        },
+                        style: 'destructive'
+                    }
+                ]
+            );
+        } else {
+            handleSelect(user);
+        }
+    }
 
     if (loading) {
         return (
@@ -75,8 +137,12 @@ export default function EscolherProf() {
                     >
                         <Ionicons name='add-circle-outline' size={28} color={ntColors.ntBlack} />
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Ionicons name='close-circle-outline' size={28} color={ntColors.ntBlack} />
+                    <TouchableOpacity onPress={() => setDeleteMode(!deleteMode)}>
+                        <Ionicons
+                            name={deleteMode ? 'close-circle-outline' : 'trash-outline'}
+                            size={28}
+                            color={ntColors.ntBlack}
+                        />
                     </TouchableOpacity>
                 </View>
                 <FlatList
@@ -84,7 +150,7 @@ export default function EscolherProf() {
                     data={profs}
                     keyExtractor={(item, index) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <NameCard name={item.nome} onPress={() => handleSelect(item)} />
+                        <NameCard name={item.nome} onPress={() => handleCardPress(item)} />
                     )}
                 />
             </View>
@@ -97,12 +163,13 @@ export default function EscolherProf() {
                 onRequestClose={() => setModalVisible(false)}
             >
                 <View style={styles.modalOverlay}>
-                    <ModalCreate 
+                    <ModalCreate
                         user={"aluno"}
                         field1={"Nome"}
                         field2={"Data de nascimento"}
                         field3={"CPF"}
                         field4={"Área de ensino"}
+                        onPress1={(dados) => handleCreateUser(dados)}
                         onPress2={() => setModalVisible(false)}
                     />
                 </View>
