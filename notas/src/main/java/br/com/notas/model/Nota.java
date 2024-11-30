@@ -1,5 +1,7 @@
 package br.com.notas.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +30,7 @@ public class Nota {
 	
 	@ManyToOne
 	@JoinColumn(name = "aluno_id")
+	@JsonBackReference
 	private Aluno aluno;
 	
 	@ManyToOne
