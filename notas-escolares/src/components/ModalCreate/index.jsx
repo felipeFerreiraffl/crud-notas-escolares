@@ -6,8 +6,15 @@ import { Text } from 'react-native';
 import { View } from 'react-native';
 import { ntColors } from './../../styles/colors/colors';
 import { ntFonts, ntFontSizes } from './../../styles/fonts/fonts';
+import { useState } from 'react';
 
-export default function ModalCreate({ user, field1, field2, field3, field4, value, onPress1, onPress2 }) {
+export default function ModalCreate({ user, field1, field2, field3, field4, onPress1, onPress2 }) {
+    const [nome, setNome] = useState('');
+    const [dtNascimento, setDtNascimento] = useState('');
+    const [cpf, setCpf] = useState('');
+    const [turma, setTurma] = useState('');
+    const [areaEnsino, setAreaEnsino] = useState('');
+    
     return (
         <View style={styles.modal}>
             <View style={styles.modalTitleContainer}>
@@ -18,33 +25,37 @@ export default function ModalCreate({ user, field1, field2, field3, field4, valu
                     <Text style={styles.modalLabel}>{field1}</Text>
                     <TextInput
                         style={styles.modalInput}
-                        value={value}
+                        value={nome}
+                        onChangeText={setNome}
                     />
                 </View>
                 <View style={styles.modalField}>
                     <Text style={styles.modalLabel}>{field2}</Text>
                     <TextInput
                         style={styles.modalInput}
-                        value={value}
+                        value={dtNascimento}
+                        onChangeText={setDtNascimento}
                     />
                 </View>
                 <View style={styles.modalField}>
                     <Text style={styles.modalLabel}>{field3}</Text>
                     <TextInput
                         style={styles.modalInput}
-                        value={value}
+                        value={cpf}
+                        onChangeText={setCpf}
                     />
                 </View>
                 <View style={styles.modalField}>
                     <Text style={styles.modalLabel}>{field4}</Text>
                     <TextInput
                         style={styles.modalInput}
-                        value={value}
+                        value={turma || areaEnsino}
+                        onChangeText={setTurma || setAreaEnsino}
                     />
                 </View>
             </View>
             <View style={styles.modalButtons}>
-                <TouchableOpacity onPress={onPress1}>
+                <TouchableOpacity onPress={() => onPress1({ nome, dtNascimento, cpf, turma, areaEnsino})}>
                     <Ionicons
                         name='checkmark-circle-outline'
                         size={27}

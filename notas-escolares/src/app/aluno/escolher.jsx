@@ -1,24 +1,29 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import ModalCreate from '../../components/ModalCreate';
 import NameCard from '../../components/NameCard/index';
 import { ntColors } from '../../styles/colors/colors';
 import { ntFonts, ntFontSizes } from '../../styles/fonts/fonts';
-import { getAll } from './../../service/api/api';
+import { createObj, deleteObj, getAll } from './../../service/api/api';
 import { UserContext } from './../../service/UserContext';
-import ModalCreate from '../../components/ModalCreate';
 
 export default function EscolherAluno() {
     const [alunos, setAlunos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
+    const [deleteMode, setDeleteMode] = useState(false); // Estado para deletar cards
     const router = useRouter();
     const { setUser } = useContext(UserContext);
 
     // Seleciona e atribui informações do aluno, direcionando até a tela inicial
     const handleSelect = (aluno) => {
-        setUser({ tipo: 'aluno', id: aluno.id, nome: aluno.nome });
+        setUser({
+            tipo: 'aluno',
+            id: aluno.id,
+            nome: aluno.nome
+        });
         router.push('/aluno');
     }
 
@@ -27,13 +32,12 @@ export default function EscolherAluno() {
         const fetchAlunos = async () => {
             try {
                 const aluno = await getAll('aluno');
-                console.log("Alunos: ", aluno);
                 setAlunos(aluno);
 
             } catch (error) {
                 console.error("Erro ao buscar alunos: ", error.message);
                 console.error("Detalhes: ", error.config);
-                
+
             } finally {
                 setLoading(false);
             }
@@ -42,6 +46,67 @@ export default function EscolherAluno() {
         fetchAlunos();
 
     }, []);
+
+    // Cria um usuário
+    const handleCreateUser = async (userData) => {
+        try {
+            await createObj('aluno', userData);
+            setModalVisible(false); // Fecha o modal após a criação
+            refreshUserList();
+
+        } catch (error) {
+            console.error("Erro ao criar aluno: ", error.message);
+
+        }   
+    }
+
+    // Atualiza a lista após deletar ou criar um usuário
+    const refreshUserList = async () => {
+        setLoading(true);
+
+        try {
+            const updatedList = await getAll('aluno');
+            setAlunos(updatedList); // Atualiza o estado depois de atualizar a lista
+
+        } catch (error) {
+            console.error("Erro ao atualizar a lista: ", error.message);
+
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Deleta ao clicar no card
+    const handleCardPress = async (user) => {
+        if (deleteMode) {
+            Alert.alert(
+                'Confirmar exclusão',
+                `Deseja excluir ${user.nome}`,
+                [
+                    {
+                        text: 'Cancelar',
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Excluir',
+                        onPress: async () => {
+                            try {
+                                await deleteObj(user.id, 'aluno');
+                                refreshUserList();
+
+                            } catch (error) {
+                                console.error("Erro ao excluir alunos: ", error.message);
+                                
+                            }
+                        },
+                        style: 'destructive'
+                    }
+                ]
+            );
+        } else {
+            handleSelect(user);
+        }
+    }
 
     // Carregando os componentes
     if (loading) {
@@ -73,10 +138,16 @@ export default function EscolherAluno() {
                 <Text style={styles.listTitle}>Selecione seu nome, aluno</Text>
                 <View style={styles.listButtonsContent}>
                     <TouchableOpacity onPress={() => setModalVisible(true)}>
-                        <Ionicons name='add-circle-outline' size={28} color={ntColors.ntBlack} />
+                        <Ionicons
+                            name='add-circle-outline'
+                            size={28}
+                            color={ntColors.ntBlack} />
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Ionicons name='close-circle-outline' size={28} color={ntColors.ntBlack} />
+                    <TouchableOpacity onPress={() => setDeleteMode(!deleteMode)}>
+                        <Ionicons
+                            name={deleteMode ? 'close-circle-outline' : 'trash-outline'}
+                            size={28}
+                            color={ntColors.ntBlack} />
                     </TouchableOpacity>
                 </View>
                 <FlatList
@@ -84,7 +155,7 @@ export default function EscolherAluno() {
                     data={alunos}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <NameCard name={item.nome} onPress={() => handleSelect(item)} />
+                        <NameCard name={item.nome} onPress={() => handleCardPress(item)} />
                     )}
                 />
             </View>
@@ -97,12 +168,13 @@ export default function EscolherAluno() {
                 onRequestClose={() => setModalVisible(false)}
             >
                 <View style={styles.modalOverlay}>
-                    <ModalCreate 
+                    <ModalCreate
                         user={"aluno"}
                         field1={"Nome"}
                         field2={"Data de nascimento"}
                         field3={"CPF"}
                         field4={"Turma"}
+                        onPress1={(dados) => handleCreateUser(dados)}
                         onPress2={() => setModalVisible(false)}
                     />
                 </View>

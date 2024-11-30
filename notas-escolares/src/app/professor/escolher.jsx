@@ -15,7 +15,7 @@ export default function EscolherProf() {
     const [modalVisible, setModalVisible] = useState(false);
 
     const router = useRouter();
-    const { user, setUser } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
 
     const handleSelect = (prof) => {
         setUser({ tipo: 'professor', id: prof.id, nome: prof.nome });
@@ -41,26 +41,6 @@ export default function EscolherProf() {
         fetchProfs();
 
     }, []);
-
-    const createProf = async () => {
-        try {
-            const response = await createObj('professor');
-
-        } catch (error) {
-            console.error("Erro ao criar professor", error);
-            Alert.alert("Erro", "Erro ao criar professor");
-        }
-    }
-
-    const deleteProf = async (profId) => {
-        try {
-            const response = await deleteObj(profId, 'professor');
-
-        } catch (error) {
-            console.error("Erro ao criar professor", error);
-            Alert.alert("Erro", "Erro ao criar professor");
-        }
-    }
 
     if (loading) {
         return (
@@ -95,9 +75,7 @@ export default function EscolherProf() {
                     >
                         <Ionicons name='add-circle-outline' size={28} color={ntColors.ntBlack} />
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={deleteProf(user.id)}
-                    >
+                    <TouchableOpacity>
                         <Ionicons name='close-circle-outline' size={28} color={ntColors.ntBlack} />
                     </TouchableOpacity>
                 </View>
@@ -118,7 +96,7 @@ export default function EscolherProf() {
                 animationType='fade'
                 onRequestClose={() => setModalVisible(false)}
             >
-                <View>
+                <View style={styles.modalOverlay}>
                     <ModalCreate 
                         user={"aluno"}
                         field1={"Nome"}
@@ -188,5 +166,11 @@ const styles = StyleSheet.create({
         fontFamily: ntFonts.ntJakartaSansRegular,
         fontSize: ntFontSizes.ntSize10,
         marginBottom: 15,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
